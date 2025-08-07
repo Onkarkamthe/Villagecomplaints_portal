@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Village Complaint Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4caf50;
+            --primary-dark: #388e3c;
+            --secondary: #ff9800;
+            --background: #f5f5dc;
+            --card: #ffffff;
+            --text: #333333;
+            --text-light: #666666;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --border: #e0e0e0;
+            --village-green: #2e7d32;
+            --village-brown: #795548;
+            --village-light: #e8f5e9;
+        }
+
+        body {
+            background-color: var(--background);
+            background-image: linear-gradient(to bottom, #e8f5e9, #f5f5dc);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .header-title {
+            font-size: 2.8rem;
+            color: var(--village-green);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            color: var(--village-brown);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .decorative-border {
+            height: 8px;
+            background: linear-gradient(90deg, var(--village-green), var(--secondary), var(--village-brown));
+            border-radius: 4px;
+            margin: 15px auto;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .app-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow);
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            background: var(--village-green);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+            position: relative;
+        }
+
+        .card-header i {
+            margin-right: 10px;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--village-brown);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background: #f57c00;
+        }
+
+        .portal-section {
+            display: none;
+        }
+
+        .complaint-list {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .complaint-card {
+            background: white;
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px var(--shadow);
+            transition: transform 0.2s;
+        }
+
+        .complaint-card:hover {
+            transform: translateX(5px);
+        }
+
+        .complaint-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .complaint-name {
+            font-weight: 600;
+            color: var(--village-green);
+            font-size: 1.1rem;
+        }
+
+        .complaint-phone {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .complaint-type {
+            background: var(--village-light);
+            color: var(--village-green);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .complaint-message {
+            line-height: 1.6;
+            margin-top: 10px;
+            color: var(--text);
+        }
+
+        .complaint-date {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 10px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(120%);
+            transition: transform 0.4s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: var(--primary);
+        }
+
+        .notification.error {
+            background: #f44336;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+
+        .login-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .login-link a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .sarpanch-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--village-light);
+        }
+
+        .logout-btn {
+            background: #f44336;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+            border: none;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: #d32f2f;
+        }
+
+        .no-complaints {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .no-complaints i {
+            font-size: 3rem;
+            color: var(--border);
+            margin-bottom: 15px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .footer-logo {
+            color: var(--village-green);
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .card {
+                max-width: 100%;
+            }
+            
+            .header-title {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-title {
+                font-size: 1.8rem;
+            }
+            
+            .card-header {
+                font-size: 1.3rem;
+                padding: 15px;
+            }
+            
+            .card-body {
+                padding: 20px;
+            }
+        }
+
+        /* Village decorations */
+        .village-decoration {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .decoration-icon {
+            display: inline-block;
+            margin: 0 15px;
+            font-size: 2rem;
+            color: var(--village-green);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .decoration-icon:nth-child(2) {
+            color: var(--secondary);
+            animation-delay: 0.5s;
+        }
+
+        .decoration-icon:nth-child(3) {
+            color: var(--village-brown);
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="header-title"><i class="fas fa-tree"></i> Village Complaint Portal</h1>
+            <div class="decorative-border"></div>
+            <p class="header-subtitle">A platform for villagers to voice concerns and for Sarpanch to address them efficiently</p>
+            
+            <div class="village-decoration">
+                <span class="decoration-icon"><i class="fas fa-tractor"></i></span>
+                <span class="decoration-icon"><i class="fas fa-water"></i></span>
+                <span class="decoration-icon"><i class="fas fa-home"></i></span>
+            </div>
+        </header>
+
+        <div class="app-container">
+            <!-- Complaint Submission Section -->
+            <div class="card" id="complaintSection">
+                <div class="card-header">
+                    <i class="fas fa-edit"></i> Submit Your Complaint
+                </div>
+                <div class="card-body">
+                    <form id="complaintForm">
+                        <div class="form-group">
+                            <label for="name"><i class="fas fa-user"></i> Full Name</label>
+                            <input type="text" id="name" placeholder="Enter your full name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="mobile"><i class="fas fa-phone"></i> Mobile Number</label>
+                            <input type="tel" id="mobile" placeholder="Enter your 10-digit mobile number" pattern="[0-9]{10}" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="type"><i class="fas fa-list"></i> Complaint Type</label>
+                            <select id="type" required>
+                                <option value="">Select a complaint type</option>
+                                <option value="Water Supply">Water Supply Issue</option>
+                                <option value="Electricity">Electricity Problem</option>
+                                <option value="Roads">Roads & Infrastructure</option>
+                                <option value="Sanitation">Sanitation & Waste Management</option>
+                                <option value="Agriculture">Agriculture Support</option>
+                                <option value="Other">Other Issues</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message"><i class="fas fa-comment"></i> Complaint Details</label>
+                            <textarea id="message" placeholder="Describe your complaint in detail..." required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn">
+                            <i class="fas fa-paper-plane"></i> Submit Complaint
+                        </button>
+                    </form>
+                    
+                    <div class="login-link">
+                        Sarpanch? <a href="#" id="sarpanchLoginLink">Login to Portal</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sarpanch Login Section -->
+            <div class="card portal-section" id="loginSection">
+                <div class="card-header">
+                    <i class="fas fa-lock"></i> Sarpanch Portal Login
+                </div>
+                <div class="card-body">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="userId"><i class="fas fa-id-card"></i> Admin ID</label>
+                            <input type="text" id="userId" placeholder="Enter Admin ID" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password"><i class="fas fa-key"></i> Password</label>
+                            <input type="password" id="password" placeholder="Enter password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn">
+                            <i class="fas fa-sign-in-alt"></i> Login to Portal
+                        </button>
+                        
+                        <button type="button" id="backToComplaint" class="btn btn-secondary" style="margin-top: 10px;">
+                            <i class="fas fa-arrow-left"></i> Back to Complaint Form
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Sarpanch Dashboard -->
+            <div class="card portal-section" id="dashboardSection">
+                <div class="sarpanch-header">
+                    <div class="card-header" style="border-radius: 10px; padding: 10px 20px;">
+                        <i class="fas fa-user-shield"></i> Sarpanch Dashboard
+                    </div>
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+                
+                <div class="card-body">
+                    <h3 style="margin-bottom: 20px; color: var(--village-green);">
+                        <i class="fas fa-list"></i> Recent Complaints
+                    </h3>
+                    
+                    <div class="complaint-list" id="complaintList">
+                        <!-- Complaints will be displayed here dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="notification" id="notification">
+            <!-- Notification messages appear here -->
+        </div>
+        
+        <footer>
+            <div class="footer-logo">Village Complaint Portal</div>
+            <p>Empowering villagers and Sarpanch for better governance</p>
+            <p>© 2023 Village Panchayat. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // DOM Elements
+        const complaintSection = document.getElementById('complaintSection');
+        const loginSection = document.getElementById('loginSection');
+        const dashboardSection = document.getElementById('dashboardSection');
+        const complaintForm = document.getElementById('complaintForm');
+        const loginForm = document.getElementById('loginForm');
+        const sarpanchLoginLink = document.getElementById('sarpanchLoginLink');
+        const backToComplaint = document.getElementById('backToComplaint');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const complaintList = document.getElementById('complaintList');
+        const notification = document.getElementById('notification');
+        
+        // Show section functions
+        function showComplaintSection() {
+            complaintSection.style.display = 'block';
+            loginSection.style.display = 'none';
+            dashboardSection.style.display = 'none';
+        }
+        
+        function showLoginSection() {
+            complaintSection.style.display = 'none';
+            loginSection.style.display = 'block';
+            dashboardSection.style.display = 'none';
+        }
+        
+        function showDashboardSection() {
+            complaintSection.style.display = 'none';
+            loginSection.style.display = 'none';
+            dashboardSection.style.display = 'block';
+            loadComplaints();
+        }
+        
+        // Initialize the view
+        showComplaintSection();
+        
+        // Event Listeners
+        sarpanchLoginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showLoginSection();
+        });
+        
+        backToComplaint.addEventListener('click', showComplaintSection);
+        
+        logoutBtn.addEventListener('click', () => {
+            showComplaintSection();
+            showNotification('You have been logged out successfully', 'success');
+        });
+        
+        // Complaint Form Submission
+        complaintForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const complaint = {
+                id: Date.now(),
+                name: document.getElementById('name').value,
+                mobile: document.getElementById('mobile').value,
+                type: document.getElementById('type').value,
+                message: document.getElementById('message').value,
+                date: new Date().toLocaleString()
+            };
+            
+            saveComplaint(complaint);
+            complaintForm.reset();
+            showNotification('Complaint submitted successfully!', 'success');
+        });
+        
+        // Login Form Submission
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const userId = document.getElementById('userId').value;
+            const password = document.getElementById('password').value;
+            
+            if (userId === 'SARPANCH_ADMIN' && password === 'sarpanch@') {
+                showDashboardSection();
+                showNotification('Login successful! Welcome Sarpanch Ji', 'success');
+            } else {
+                showNotification('Invalid credentials. Please try again.', 'error');
+            }
+        });
+        
+        // Save complaint to localStorage
+        function saveComplaint(complaint) {
+            let complaints = JSON.parse(localStorage.getItem('complaints')) || [];
+            complaints.unshift(complaint); // Add to beginning of array
+            localStorage.setItem('complaints', JSON.stringify(complaints));
+        }
+        
+        // Load complaints from localStorage
+        function loadComplaints() {
+            const complaints = JSON.parse(localStorage.getItem('complaints')) || [];
+            complaintList.innerHTML = '';
+            
+            if (complaints.length === 0) {
+                complaintList.innerHTML = `
+                    <div class="no-complaints">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No complaints found</h3>
+                        <p>Villagers haven't submitted any complaints yet.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            complaints.forEach(complaint => {
+                const complaintCard = document.createElement('div');
+                complaintCard.className = 'complaint-card';
+                complaintCard.innerHTML = `
+                    <div class="complaint-header">
+                        <div>
+                            <div class="complaint-name">${complaint.name}</div>
+                            <div class="complaint-phone">${complaint.mobile}</div>
+                        </div>
+                        <div class="complaint-type">${complaint.type}</div>
+                    </div>
+                    <div class="complaint-message">${complaint.message}</div>
+                    <div class="complaint-date">Submitted: ${complaint.date}</div>
+                `;
+                complaintList.appendChild(complaintCard);
+            });
+        }
+        
+        // Show notification
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Initialize with some sample complaints for demonstration
+        window.addEventListener('DOMContentLoaded', () => {
+            // Add sample complaints if none exist
+            if (!localStorage.getItem('complaints')) {
+                const sampleComplaints = [
+                    {
+                        id: 1,
+                        name: "aditya karkhile",
+                        mobile: "9172219222",
+                        type: "Water Supply",
+                        message: "Our area has been facing irregular water supply for the past week. Water comes only for 1 hour in the morning which is insufficient for our daily needs.",
+                        date: new Date().toLocaleString()
+                    },
+                    
+                ];
+                
+                localStorage.setItem('complaints', JSON.stringify(sampleComplaints));
+            }
+        });
+    </script>
+</body>
+</html>
